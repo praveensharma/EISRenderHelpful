@@ -45,7 +45,6 @@
 #define MatrixElement(m, row, column)  (m[(column * 4) + row])
 
 typedef float EISVector3D[3];
-typedef float EISVector2D[2];
 
 // 4x4 matrix - column major. X vector is 0, 1, 2, etc.
 //	0	4	8	12

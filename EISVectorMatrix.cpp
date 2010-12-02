@@ -336,37 +336,54 @@ void EISUIViewToWorldSpaceRay (CGPoint inScreenSpace, float *projViewModel, CGSi
 #pragma mark Projective Matrix Inverse
 #pragma mark -
 
+int EISInvertMatrix4x4(float *m, float *out) {
+
 #define SWAP_ROWS_DOUBLE(a, b) { double *_tmp = a; (a)=(b); (b)=_tmp; }
 #define SWAP_ROWS_FLOAT(a, b) { float *_tmp = a; (a)=(b); (b)=_tmp; }
 #define MAT(m,r,c) (m)[(c)*4+(r)]
-
-int EISInvertMatrix4x4(float *m, float *out) {
-	
+		
 	float wtmp[4][8];
 	float m0, m1, m2, m3, s;
-	float *r0, *r1, *r2, *r3;
-	r0 = wtmp[0], r1 = wtmp[1], r2 = wtmp[2], r3 = wtmp[3];
-	r0[0] = MAT(m, 0, 0), r0[1] = MAT(m, 0, 1),
-	r0[2] = MAT(m, 0, 2), r0[3] = MAT(m, 0, 3),
-	r0[4] = 1.0, r0[5] = r0[6] = r0[7] = 0.0,
-	r1[0] = MAT(m, 1, 0), r1[1] = MAT(m, 1, 1),
-	r1[2] = MAT(m, 1, 2), r1[3] = MAT(m, 1, 3),
-	r1[5] = 1.0, r1[4] = r1[6] = r1[7] = 0.0,
-	r2[0] = MAT(m, 2, 0), r2[1] = MAT(m, 2, 1),
-	r2[2] = MAT(m, 2, 2), r2[3] = MAT(m, 2, 3),
-	r2[6] = 1.0, r2[4] = r2[5] = r2[7] = 0.0,
-	r3[0] = MAT(m, 3, 0), r3[1] = MAT(m, 3, 1),
-	r3[2] = MAT(m, 3, 2), r3[3] = MAT(m, 3, 3),
-	r3[7] = 1.0, r3[4] = r3[5] = r3[6] = 0.0;
+//	float *r0, *r1, *r2, *r3;
+	
+	float *r0 = wtmp[0];
+	r0[0] = MAT(m, 0, 0), 
+	r0[1] = MAT(m, 0, 1),
+	r0[2] = MAT(m, 0, 2), 
+	r0[3] = MAT(m, 0, 3),
+	r0[4] = 1.0, 
+	r0[5] = r0[6] = r0[7] = 0.0;
+	
+	float *r1 = wtmp[1];
+	r1[0] = MAT(m, 1, 0), 
+	r1[1] = MAT(m, 1, 1),
+	r1[2] = MAT(m, 1, 2), 
+	r1[3] = MAT(m, 1, 3),
+	r1[5] = 1.0, 
+	r1[4] = r1[6] = r1[7] = 0.0;
+	
+	float *r2 = wtmp[2];
+	r2[0] = MAT(m, 2, 0), 
+	r2[1] = MAT(m, 2, 1),
+	r2[2] = MAT(m, 2, 2), 
+	r2[3] = MAT(m, 2, 3),
+	r2[6] = 1.0, 
+	r2[4] = r2[5] = r2[7] = 0.0;
+	
+	float *r3 = wtmp[3];
+	r3[0] = MAT(m, 3, 0), 
+	r3[1] = MAT(m, 3, 1),
+	r3[2] = MAT(m, 3, 2), 
+	r3[3] = MAT(m, 3, 3),
+	r3[7] = 1.0, 
+	r3[4] = r3[5] = r3[6] = 0.0;
+	
 	/* choose pivot - or die */
-	if (fabsf(r3[0]) > fabsf(r2[0]))
-		SWAP_ROWS_FLOAT(r3, r2);
-	if (fabsf(r2[0]) > fabsf(r1[0]))
-		SWAP_ROWS_FLOAT(r2, r1);
-	if (fabsf(r1[0]) > fabsf(r0[0]))
-		SWAP_ROWS_FLOAT(r1, r0);
-	if (0.0 == r0[0])
-		return 0;
+	if (fabsf(r3[0]) > fabsf(r2[0])) SWAP_ROWS_FLOAT(r3, r2);
+	if (fabsf(r2[0]) > fabsf(r1[0])) SWAP_ROWS_FLOAT(r2, r1);
+	if (fabsf(r1[0]) > fabsf(r0[0])) SWAP_ROWS_FLOAT(r1, r0);
+	if (0.0 == r0[0]) return 0;
+	
 	/* eliminate first variable     */
 	m1 = r1[0] / r0[0];
 	m2 = r2[0] / r0[0];
@@ -407,13 +424,12 @@ int EISInvertMatrix4x4(float *m, float *out) {
 		r2[7] -= m2 * s;
 		r3[7] -= m3 * s;
 	}
+	
 	/* choose pivot - or die */
-	if (fabsf(r3[1]) > fabsf(r2[1]))
-		SWAP_ROWS_FLOAT(r3, r2);
-	if (fabsf(r2[1]) > fabsf(r1[1]))
-		SWAP_ROWS_FLOAT(r2, r1);
-	if (0.0 == r1[1])
-		return 0;
+	if (fabsf(r3[1]) > fabsf(r2[1])) SWAP_ROWS_FLOAT(r3, r2);
+	if (fabsf(r2[1]) > fabsf(r1[1])) SWAP_ROWS_FLOAT(r2, r1);
+	if (0.0 == r1[1]) return 0;
+	
 	/* eliminate second variable */
 	m2 = r2[1] / r1[1];
 	m3 = r3[1] / r1[1];
@@ -441,18 +457,19 @@ int EISInvertMatrix4x4(float *m, float *out) {
 		r2[7] -= m2 * s;
 		r3[7] -= m3 * s;
 	}
+	
 	/* choose pivot - or die */
-	if (fabsf(r3[2]) > fabsf(r2[2]))
-		SWAP_ROWS_FLOAT(r3, r2);
-	if (0.0 == r2[2])
-		return 0;
+	if (fabsf(r3[2]) > fabsf(r2[2])) SWAP_ROWS_FLOAT(r3, r2);
+	if (0.0 == r2[2]) return 0;
+	
 	/* eliminate third variable */
 	m3 = r3[2] / r2[2];
 	r3[3] -= m3 * r2[3], r3[4] -= m3 * r2[4],
 	r3[5] -= m3 * r2[5], r3[6] -= m3 * r2[6], r3[7] -= m3 * r2[7];
+	
 	/* last check */
-	if (0.0 == r3[3])
-		return 0;
+	if (0.0 == r3[3]) return 0;
+	
 	s = 1.0 / r3[3];		/* now back substitute row 3 */
 	r3[4] *= s;
 	r3[5] *= s;
@@ -488,6 +505,7 @@ int EISInvertMatrix4x4(float *m, float *out) {
 	MAT(out, 2, 3) = r2[7], MAT(out, 3, 0) = r3[4];
 	MAT(out, 3, 1) = r3[5], MAT(out, 3, 2) = r3[6];
 	MAT(out, 3, 3) = r3[7];
+	
 	return 1;
 }
 
