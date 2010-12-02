@@ -21,7 +21,8 @@
 
 	EISMatrix4x4	m_projection;
 	
-	EISMatrix4x4	m_modelTransform;
+	EISMatrix4x4	        m_modelTransform;
+	EISMatrix4x4	m_surfaceNormalTransform;
 	
 	EISMatrix4x4	m_scaleTransform;
 
@@ -34,7 +35,6 @@
 
 	EISMatrix4x4	m_cameraTransform;
 	
-	EISMatrix4x4	m_surfaceNormalTransform;
 
 	NSMutableDictionary	*m_renderables;
 
@@ -68,6 +68,7 @@
 
 - (float *) modelTransform; 
 - (void) setModelTransform:(EISMatrix4x4)input; 
+- (float *) surfaceNormalTransform; 
 
 - (float *) scaleTransform; 
 - (void) setScaleTransform:(CGPoint)input; 
@@ -84,7 +85,6 @@
 
 - (float *) cameraTransform; 
 
-- (float *) surfaceNormalTransform; 
 
 - (void)placeCameraAtLocation:(EISVector3D)location target:(EISVector3D)target up:(EISVector3D)up;
 

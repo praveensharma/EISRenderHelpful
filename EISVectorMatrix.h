@@ -116,7 +116,7 @@ extern "C" {
 
 	void EISUIViewToWorldSpaceRay (CGPoint inScreenSpace, float *projViewModel, CGSize viewportSize, EISMatrix4x4 inWorldSpace);
 		
-	int EISInvertMatrix4x4(float *m, float *out);
+	int EISMatrix4x4Inverse(float *m, float *out);
 
 	void EISMatrix4x4OolongInverse(EISMatrix4x4 mat, EISMatrix4x4 inverted);
 

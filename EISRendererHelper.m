@@ -31,25 +31,26 @@
 		EISVector3DSet(m_target, 0, 0, -1);
 		EISVector3DSet(    m_up, 0, 1,  0);
 		
-		EISMatrix4x4SetIdentity(m_projectionViewModelTransform);
+		EISMatrix4x4SetIdentity(        m_modelTransform);
+		EISMatrix4x4SetIdentity(m_surfaceNormalTransform);
+		
+		EISMatrix4x4SetIdentity(m_viewTransform);
+
+		EISMatrix4x4SetIdentity(m_cameraTransform);
 		
 		EISMatrix4x4SetIdentity(m_viewModelTransform);
 		
 		EISMatrix4x4SetIdentity(m_projection);
-		
-		EISMatrix4x4SetIdentity(m_modelTransform);
+
+		EISMatrix4x4SetIdentity(m_projectionViewModelTransform);
 		
 		EISMatrix4x4SetIdentity(m_scaleTransform);
 
 		EISMatrix4x4SetIdentity(m_translationTransform);
 
-		EISMatrix4x4SetIdentity(m_anchoredScaleTranslation);
+		EISMatrix4x4SetIdentity(       m_anchoredScaleTranslation);
 		EISMatrix4x4SetIdentity(m_inverseAnchoredScaleTranslation);
 		
-		EISMatrix4x4SetIdentity(m_viewTransform);
-		
-		EISMatrix4x4SetIdentity(m_cameraTransform);
-		EISMatrix4x4SetIdentity(m_surfaceNormalTransform);
 
 	} // if (self = [super init])
 	
@@ -305,7 +306,15 @@
 - (void) setModelTransform:(EISMatrix4x4)input {
 	
 	EISMatrix4x4Set(m_modelTransform, input);
+	
+	EISMatrix4x4Inverse(m_modelTransform, m_surfaceNormalTransform);
 
+}
+
+- (float *) surfaceNormalTransform {
+	
+	return &m_surfaceNormalTransform[0];
+	
 }
 
 - (float *) scaleTransform {
@@ -365,12 +374,6 @@
 - (float *) cameraTransform {
 	
 	return &m_cameraTransform[0];
-	
-}
-
-- (float *) surfaceNormalTransform {
-	
-	return &m_surfaceNormalTransform[0];
 	
 }
 

@@ -282,7 +282,7 @@ void EISUIViewToWorldSpaceRay (CGPoint inScreenSpace, float *projViewModel, CGSi
 	int result = -1;
 	
 	float projViewModelInvert[16];
-	result = EISInvertMatrix4x4(projViewModel, projViewModelInvert);
+	result = EISMatrix4x4Inverse(projViewModel, projViewModelInvert);
 	
 	// Convert from screen space to NDC (-1 < xyz < +1)
 	float inProjectionSpace[4];
@@ -336,7 +336,7 @@ void EISUIViewToWorldSpaceRay (CGPoint inScreenSpace, float *projViewModel, CGSi
 #pragma mark Projective Matrix Inverse
 #pragma mark -
 
-int EISInvertMatrix4x4(float *m, float *out) {
+int EISMatrix4x4Inverse(float *m, float *out) {
 
 #define SWAP_ROWS_DOUBLE(a, b) { double *_tmp = a; (a)=(b); (b)=_tmp; }
 #define SWAP_ROWS_FLOAT(a, b) { float *_tmp = a; (a)=(b); (b)=_tmp; }
