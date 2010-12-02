@@ -1,0 +1,110 @@
+//
+//  EISRendererHelper.h
+//
+//  Created by turner on 3/4/10.
+//  Copyright 2010 Douglass Turner Consulting. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <OpenGLES/ES1/gl.h>
+#import <OpenGLES/ES1/glext.h>
+#import "EISVectorMatrix.h"
+
+@interface EISRendererHelper : NSObject {
+
+	EISMatrix4x4	m_eye;
+	EISMatrix4x4	m_target;
+	EISMatrix4x4	m_up;
+	
+	EISMatrix4x4	m_projectionViewModelTransform;
+	EISMatrix4x4	          m_viewModelTransform;
+
+	EISMatrix4x4	m_projection;
+	
+	EISMatrix4x4	m_modelTransform;
+	
+	EISMatrix4x4	m_scaleTransform;
+
+	EISMatrix4x4	       m_anchoredScaleTranslation;
+	EISMatrix4x4	m_inverseAnchoredScaleTranslation;
+
+	EISMatrix4x4	m_translationTransform;
+	
+	EISMatrix4x4	m_viewTransform;
+
+	EISMatrix4x4	m_cameraTransform;
+	
+	EISMatrix4x4	m_surfaceNormalTransform;
+
+	NSMutableDictionary	*m_renderables;
+
+}
+
+@property(nonatomic,retain)NSMutableDictionary *renderables;
+
+// get/set eye
+- (float *) eye; 
+- (void) setEye:(EISMatrix4x4)input; 
+- (void) setEyeX:(float)x y:(float)y z:(float)z; 
+
+// get/set target
+- (float *) target; 
+- (void) setTarget:(EISMatrix4x4)input; 
+- (void) setTargetX:(float)x y:(float)y z:(float)z; 
+
+// get/set up
+- (float *) up; 
+- (void) setUp:(EISMatrix4x4)input; 
+- (void) setUpX:(float)x y:(float)y z:(float)z; 
+
+- (float *) projectionViewModelTransform; 
+- (void) setProjectionViewModelTransform:(EISMatrix4x4)input; 
+
+- (float *) viewModelTransform; 
+- (void) setViewModelTransform:(EISMatrix4x4)input; 
+
+- (float *) projection; 
+- (void) setProjection:(EISMatrix4x4)input; 
+
+- (float *) modelTransform; 
+- (void) setModelTransform:(EISMatrix4x4)input; 
+
+- (float *) scaleTransform; 
+- (void) setScaleTransform:(CGPoint)input; 
+
+- (float *) anchoredScaleTranslation;
+- (void) setAnchoredScaleTranslation:(CGPoint)input; 
+- (float *) inverseAnchoredScaleTranslation; 
+
+- (float *) translationTransform; 
+- (void) setTranslationTransform:(CGPoint)input; 
+
+- (float *) viewTransform; 
+- (void) setViewTransform:(EISMatrix4x4)input; 
+
+- (float *) cameraTransform; 
+
+- (float *) surfaceNormalTransform; 
+
+- (void)placeCameraAtLocation:(EISVector3D)location target:(EISVector3D)target up:(EISVector3D)up;
+
+- (void)perspectiveProjectionWithFieldOfViewInDegreesY:(GLfloat)fieldOfViewInDegreesY 
+							aspectRatioWidthOverHeight:(GLfloat)aspectRatioWidthOverHeight 
+												  near:(GLfloat)near 
+												   far:(GLfloat)far;
+
+- (void)orthographicProjectionLeft:(GLfloat)left 
+							 right:(GLfloat)right 
+							   top:(GLfloat)top 
+							bottom:(GLfloat)bottom 
+							  near:(GLfloat)near 
+							   far:(GLfloat)far;
+
++ (void) echoTransform:(EISMatrix4x4)transform;
+
++ (CGPoint) EricHainesSphericalInverseMappingSp:(EISVector3D)Sp 
+											 Se:(EISVector3D)Se 
+											 Sn:(EISVector3D)Sn;
+
+
+@end
