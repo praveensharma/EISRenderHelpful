@@ -12,9 +12,9 @@
 
 @interface EISRendererHelper : NSObject {
 
-	EISMatrix4x4	m_eye;
-	EISMatrix4x4	m_target;
-	EISMatrix4x4	m_up;
+	EISVector3D		m_eye;
+	EISVector3D		m_target;
+	EISVector3D		m_up;
 	
 	EISMatrix4x4	m_projectionViewModelTransform;
 	EISMatrix4x4	          m_viewModelTransform;
@@ -44,17 +44,17 @@
 
 // get/set eye
 - (float *) eye; 
-- (void) setEye:(EISMatrix4x4)input; 
+- (void) setEye:(EISVector3D)input; 
 - (void) setEyeX:(float)x y:(float)y z:(float)z; 
 
 // get/set target
 - (float *) target; 
-- (void) setTarget:(EISMatrix4x4)input; 
+- (void) setTarget:(EISVector3D)input; 
 - (void) setTargetX:(float)x y:(float)y z:(float)z; 
 
 // get/set up
 - (float *) up; 
-- (void) setUp:(EISMatrix4x4)input; 
+- (void) setUp:(EISVector3D)input; 
 - (void) setUpX:(float)x y:(float)y z:(float)z; 
 
 - (float *) projectionViewModelTransform; 

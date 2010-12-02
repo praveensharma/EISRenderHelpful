@@ -27,6 +27,10 @@
 							 [NSNull null], @"model",
 							nil] autorelease];
 
+		EISVector3DSet(   m_eye, 0, 0,  0);
+		EISVector3DSet(m_target, 0, 0, -1);
+		EISVector3DSet(    m_up, 0, 1,  0);
+		
 		EISMatrix4x4SetIdentity(m_projectionViewModelTransform);
 		
 		EISMatrix4x4SetIdentity(m_viewModelTransform);
@@ -57,7 +61,7 @@
 	return &m_eye[0];
 }
 
-- (void) setEye:(EISMatrix4x4)input {
+- (void) setEye:(EISVector3D)input {
 	m_eye[0] = input[0];
 	m_eye[1] = input[1];
 	m_eye[2] = input[2];
@@ -75,7 +79,7 @@
 	return &m_target[0];
 }
 
-- (void) setTarget:(EISMatrix4x4)input {
+- (void) setTarget:(EISVector3D)input {
 	m_target[0] = input[0];
 	m_target[1] = input[1];
 	m_target[2] = input[2];
@@ -93,7 +97,7 @@
 	return &m_up[0];
 }
 
-- (void) setUp:(EISMatrix4x4)input {
+- (void) setUp:(EISVector3D)input {
 	m_up[0] = input[0];
 	m_up[1] = input[1];
 	m_up[2] = input[2];
@@ -196,7 +200,7 @@
 	EISVector3D p; // translation vector
 	
 	// The camera is always pointed along the -z axis. So the "a" vector = -(target - eye)
-	EISVector3DLoad(a, -(target[0] - location[0]), -(target[1] - location[1]), -(target[2] - location[2]));
+	EISVector3DSet(a, -(target[0] - location[0]), -(target[1] - location[1]), -(target[2] - location[2]));
 	EISVector3DNormalize(a);
 	
 	// The up parameter is assumed approximate. It corresponds to the y-axis or "o" vector.

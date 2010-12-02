@@ -50,7 +50,7 @@ static EISMatrix4x4	_eis_vector_matrix_identity_matrix_4x4_ =
 #pragma mark Vector3D Functions
 #pragma mark -
 
-void EISVector3DLoad(EISVector3D v, float x, float y, float z) { 
+void EISVector3DSet(EISVector3D v, float x, float y, float z) { 
 	v[0] = x; 
 	v[1] = y; 
 	v[2] = z; 
