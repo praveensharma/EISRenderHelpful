@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31F34A4912AABD3C00FADB09 /* EISGLHelpful.h in Headers */ = {isa = PBXBuildFile; fileRef = 31F34A4312AABD3C00FADB09 /* EISGLHelpful.h */; };
+		31F34A4A12AABD3C00FADB09 /* EISGLHelpful.m in Sources */ = {isa = PBXBuildFile; fileRef = 31F34A4412AABD3C00FADB09 /* EISGLHelpful.m */; };
+		31F34A4B12AABD3C00FADB09 /* EISTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 31F34A4512AABD3C00FADB09 /* EISTexture.h */; };
+		31F34A4C12AABD3C00FADB09 /* EISTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 31F34A4612AABD3C00FADB09 /* EISTexture.m */; };
+		31F34A4D12AABD3C00FADB09 /* ESRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 31F34A4712AABD3C00FADB09 /* ESRenderer.h */; };
+		31F34A4E12AABD3C00FADB09 /* GlErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = 31F34A4812AABD3C00FADB09 /* GlErrors.h */; };
 		31FCE67E12A7F3C500721AE8 /* EISPlane.h in Headers */ = {isa = PBXBuildFile; fileRef = 31FCE67712A7F3C500721AE8 /* EISPlane.h */; };
 		31FCE67F12A7F3C500721AE8 /* EISPlane.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FCE67812A7F3C500721AE8 /* EISPlane.m */; };
 		31FCE68012A7F3C500721AE8 /* EISRendererHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 31FCE67912A7F3C500721AE8 /* EISRendererHelper.h */; };
@@ -19,6 +25,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		31F34A4312AABD3C00FADB09 /* EISGLHelpful.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISGLHelpful.h; sourceTree = "<group>"; };
+		31F34A4412AABD3C00FADB09 /* EISGLHelpful.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EISGLHelpful.m; sourceTree = "<group>"; };
+		31F34A4512AABD3C00FADB09 /* EISTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISTexture.h; sourceTree = "<group>"; };
+		31F34A4612AABD3C00FADB09 /* EISTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EISTexture.m; sourceTree = "<group>"; };
+		31F34A4712AABD3C00FADB09 /* ESRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESRenderer.h; sourceTree = "<group>"; };
+		31F34A4812AABD3C00FADB09 /* GlErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlErrors.h; sourceTree = "<group>"; };
 		31FCE67712A7F3C500721AE8 /* EISPlane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISPlane.h; sourceTree = "<group>"; };
 		31FCE67812A7F3C500721AE8 /* EISPlane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EISPlane.m; sourceTree = "<group>"; };
 		31FCE67912A7F3C500721AE8 /* EISRendererHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISRendererHelper.h; sourceTree = "<group>"; };
@@ -73,6 +85,12 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				31F34A4312AABD3C00FADB09 /* EISGLHelpful.h */,
+				31F34A4412AABD3C00FADB09 /* EISGLHelpful.m */,
+				31F34A4512AABD3C00FADB09 /* EISTexture.h */,
+				31F34A4612AABD3C00FADB09 /* EISTexture.m */,
+				31F34A4712AABD3C00FADB09 /* ESRenderer.h */,
+				31F34A4812AABD3C00FADB09 /* GlErrors.h */,
 				31FCE67D12A7F3C500721AE8 /* Logging.h */,
 				31FCE67712A7F3C500721AE8 /* EISPlane.h */,
 				31FCE67812A7F3C500721AE8 /* EISPlane.m */,
@@ -104,6 +122,10 @@
 				31FCE68012A7F3C500721AE8 /* EISRendererHelper.h in Headers */,
 				31FCE68312A7F3C500721AE8 /* EISVectorMatrix.h in Headers */,
 				31FCE68412A7F3C500721AE8 /* Logging.h in Headers */,
+				31F34A4912AABD3C00FADB09 /* EISGLHelpful.h in Headers */,
+				31F34A4B12AABD3C00FADB09 /* EISTexture.h in Headers */,
+				31F34A4D12AABD3C00FADB09 /* ESRenderer.h in Headers */,
+				31F34A4E12AABD3C00FADB09 /* GlErrors.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +182,8 @@
 				31FCE67F12A7F3C500721AE8 /* EISPlane.m in Sources */,
 				31FCE68112A7F3C500721AE8 /* EISRendererHelper.m in Sources */,
 				31FCE68212A7F3C500721AE8 /* EISVectorMatrix.cpp in Sources */,
+				31F34A4A12AABD3C00FADB09 /* EISGLHelpful.m in Sources */,
+				31F34A4C12AABD3C00FADB09 /* EISTexture.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
