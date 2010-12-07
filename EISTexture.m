@@ -476,8 +476,8 @@ const int kMaxTextureSizeExp = 10;
 		[EISGLHelpful checkGLError];
 		
 		NSData *d = [data objectForKey:@"pixels"];
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_width, m_height, 0, GL_LUMINANCE, GL_FLOAT,          (GLubyte *)[d bytes]);
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_width, m_height, 0, GL_LUMINANCE, GL_HALF_FLOAT_OES, (GLubyte *)[d bytes]);
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_width, m_height, 0, GL_LUMINANCE, GL_FLOAT,          (GLubyte *)[d bytes]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_width, m_height, 0, GL_LUMINANCE, GL_HALF_FLOAT_OES, (GLubyte *)[d bytes]);
 		[EISGLHelpful checkGLError];
 		
 	}
