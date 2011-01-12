@@ -26,6 +26,8 @@ const int kMaxTextureSizeExp = 10;
 
 + (void) checkPattern;
 
++ (void) randomValueLookUpTableBuffer:(float *) buffer width:(NSUInteger)width height:(NSUInteger)height;
+
 @end
 
 @implementation EISTexture
@@ -485,6 +487,40 @@ const int kMaxTextureSizeExp = 10;
 	return self;
 }
 
+- (id)initAsRandomValuesWidth:(NSUInteger)width height:(NSUInteger)height {
+	
+	self = [super init];
+	
+	if(nil != self) {
+		
+		float *buf = malloc(width * height * sizeof(float));
+
+		self.width = width;
+		self.height = height;
+		[EISTexture randomValueLookUpTableBuffer:buf width:self.width height:self.height];
+		
+		glGenTextures(1, &m_name);
+		glBindTexture(GL_TEXTURE_2D, m_name);
+		
+		// Clamp at texture boundaries
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		
+		// NO interpolation of table values
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		
+		m_channelCount	= 1;
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, self.width, self.height, 0, GL_LUMINANCE, GL_FLOAT, (GLubyte *)buf);
+		[EISGLHelpful checkGLError];
+		
+		free(buf);
+	}
+	
+	return self;
+	
+}
+
 - (id)initWithCheckPattern {
 	
 	self = [super init];
@@ -738,6 +774,30 @@ const int kMaxTextureSizeExp = 10;
 		DLog(@"-----", i);
 		
 	}
+	
+}
+
++ (void) randomValueLookUpTableBuffer:(float *) buffer width:(NSUInteger)width height:(NSUInteger)height {
+
+#define ARC4RANDOM_MAX (0x100000000)
+
+	NSUInteger k = 0;
+	for (int i = 0; i < width; i++) {
+		
+		for (int j = 0; j < height; j++) {
+			
+			// 0 to 1.0
+			double r = ((double)arc4random() / ARC4RANDOM_MAX);
+			
+			buffer[k] = (float)r;
+			
+			DLog(@"w(%d) x h(%d) = %.4f", i, j, buffer[k]);
+			
+			++k;
+			
+		} // for (height)
+		
+	} // for (width)
 	
 }
 

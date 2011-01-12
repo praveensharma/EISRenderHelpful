@@ -68,6 +68,8 @@ typedef enum {
 
 - (id)initWithWaveletData:(NSDictionary *)data;
 
+- (id)initAsRandomValuesWidth:(NSUInteger)width height:(NSUInteger)height;
+
 - (id)initWithCheckPattern;
 
 + (BOOL) isSizePowerOfTwo:(uint32_t)size;
