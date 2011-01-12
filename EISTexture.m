@@ -10,8 +10,10 @@
 #import "EISGLHelpful.h"
 #import "Logging.h"
 
+static int singles2halfp(void *dstHalfFloat, void *srcFloat, int length);
+
 //static GLubyte checkPatternAlpha[checkPatternHeight][checkPatternWidth];
-static GLubyte checkPatternAlpha1D[checkPatternHeight * checkPatternWidth];
+static GLubyte checkPatternAlphaChannelUnsignedByte[checkPatternHeight * checkPatternWidth];
 
 const int kMaxTextureSizeExp = 10;
 #define kMaxTextureSize (1 << kMaxTextureSizeExp)
@@ -24,7 +26,7 @@ const int kMaxTextureSizeExp = 10;
 
 + (NSString*)alphaDescriptionForAlphaInfo:(CGImageAlphaInfo)alphaInfo;
 
-+ (void) checkPattern;
++ (void) createCheckPatternAlphaChannel;
 
 + (void) randomValueLookUpTableBuffer:(float *) buffer width:(NSUInteger)width height:(NSUInteger)height;
 
@@ -492,12 +494,20 @@ const int kMaxTextureSizeExp = 10;
 	self = [super init];
 	
 	if(nil != self) {
-		
-		float *buf = malloc(width * height * sizeof(float));
 
 		self.width = width;
 		self.height = height;
-		[EISTexture randomValueLookUpTableBuffer:buf width:self.width height:self.height];
+
+		float *floats = malloc(self.width * self.height * sizeof(float));
+		[EISTexture randomValueLookUpTableBuffer:floats width:self.width height:self.height];
+		
+		int numberOfSamples = self.width * self.height;
+		int length = numberOfSamples * sizeof(unsigned short);
+		unsigned short *halfFloats = (unsigned short *) malloc(length);
+		
+		(void)singles2halfp((void *)halfFloats, (void *)floats, numberOfSamples);
+		free(floats);
+		
 		
 		glGenTextures(1, &m_name);
 		glBindTexture(GL_TEXTURE_2D, m_name);
@@ -511,23 +521,23 @@ const int kMaxTextureSizeExp = 10;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		
 		m_channelCount	= 1;
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, self.width, self.height, 0, GL_LUMINANCE, GL_FLOAT, (GLubyte *)buf);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, self.width, self.height, 0, GL_LUMINANCE, GL_HALF_FLOAT_OES, (GLubyte *)halfFloats);
 		[EISGLHelpful checkGLError];
 		
-		free(buf);
+		free(halfFloats);
 	}
 	
 	return self;
 	
 }
 
-- (id)initWithCheckPattern {
+- (id)initWithCheckPatternAlphaChannel {
 	
 	self = [super init];
 	
 	if(nil != self) {
 
-		[EISTexture checkPattern];
+		[EISTexture createCheckPatternAlphaChannel];
 		
 		
 		 m_width	= checkPatternWidth;
@@ -544,8 +554,9 @@ const int kMaxTextureSizeExp = 10;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		m_channelCount	= 1;
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, m_width, m_height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, checkPatternAlpha);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, m_width, m_height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, checkPatternAlpha1D);
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA,		m_width, m_height, 0, GL_ALPHA,		GL_UNSIGNED_BYTE, (GLubyte *)checkPatternAlphaChannelUnsignedByte);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE,	m_width, m_height, 0, GL_LUMINANCE,	GL_UNSIGNED_BYTE, (GLubyte *)checkPatternAlphaChannelUnsignedByte);
+		
 		[EISGLHelpful checkGLError];
 				
 	}
@@ -745,33 +756,33 @@ const int kMaxTextureSizeExp = 10;
 	return result;
 };
 
-+ (void) checkPattern {
++ (void) createCheckPatternAlphaChannel {
 	
 	NSUInteger k = 0;
 	for (int i = 0; i < checkPatternHeight; i++) {
 		
-		DLog(@"row %d", i);
+		//		DLog(@"row %d", i);
 		
 		for (int j = 0; j < checkPatternWidth; j++) {
 			
-//			int c = ( ( ( (i & 0x8) == 0) ^ ( (j & 0x8) ) == 0) ) * 255;
-			int c = ( ( ( (i & 0x4) == 0) ^ ( (j & 0x4) ) == 0) ) * 255;
-//			int c = ( ( ( (i & 0x2) == 0) ^ ( (j & 0x2) ) == 0) ) * 255;
+			int c = ( ( ( (i & 0x8) == 0) ^ ( (j & 0x8) ) == 0) ) * 255;
+			//			int c = ( ( ( (i & 0x4) == 0) ^ ( (j & 0x4) ) == 0) ) * 255;
+			//			int c = ( ( ( (i & 0x2) == 0) ^ ( (j & 0x2) ) == 0) ) * 255;
 			
-//			checkPatternRGBA[i][j][0] = (GLubyte) c;
-//			checkPatternRGBA[i][j][1] = (GLubyte) c;
-//			checkPatternRGBA[i][j][2] = (GLubyte) c;
-//			checkPatternRGBA[i][j][3] = (GLubyte) 255;
-
-//			checkPatternAlpha[i][j] = (GLubyte) c;
-//			DLog(@"(%d, %d) = %d", i, j, checkPatternAlpha[i][j]);
+			//			checkPatternRGBA[i][j][0] = (GLubyte) c;
+			//			checkPatternRGBA[i][j][1] = (GLubyte) c;
+			//			checkPatternRGBA[i][j][2] = (GLubyte) c;
+			//			checkPatternRGBA[i][j][3] = (GLubyte) 255;
 			
-			checkPatternAlpha1D[ k ] = (GLubyte) c;
-			DLog(@"(%d, %d) = %d", i, j, checkPatternAlpha1D[ k ]);
+			//			checkPatternAlpha[i][j] = (GLubyte) c;
+			//			DLog(@"(%d, %d) = %d", i, j, checkPatternAlpha[i][j]);
+			
+			checkPatternAlphaChannelUnsignedByte[ k ] = (GLubyte) c;
+			//			DLog(@"(%d, %d) = %d", i, j, checkPatternAlpha1D[ k ]);
 			++k;
 		}
 		
-		DLog(@"-----", i);
+		//		DLog(@"\n");
 		
 	}
 	
@@ -791,7 +802,7 @@ const int kMaxTextureSizeExp = 10;
 			
 			buffer[k] = (float)r;
 			
-			DLog(@"w(%d) x h(%d) = %.4f", i, j, buffer[k]);
+//			DLog(@"w(%d) x h(%d) = %.4f", i, j, buffer[k]);
 			
 			++k;
 			
@@ -802,3 +813,88 @@ const int kMaxTextureSizeExp = 10;
 }
 
 @end
+
+
+#define  INT16_TYPE          short
+#define UINT16_TYPE unsigned short
+#define  INT32_TYPE          long
+#define UINT32_TYPE unsigned long
+
+int singles2halfp(void *dstHalfFloat, void *srcFloat, int length) {
+	
+    UINT16_TYPE *hp = (UINT16_TYPE *) dstHalfFloat; // Type pun output as an unsigned 16-bit int
+    UINT32_TYPE *xp = (UINT32_TYPE *) srcFloat; // Type pun input as an unsigned 32-bit int
+    UINT16_TYPE    hs, he, hm;
+    UINT32_TYPE x, xs, xe, xm;
+    int hes;
+    static int next;  // Little Endian adjustment
+    static int checkieee = 1;  // Flag to check for IEEE754, Endian, and word size
+    double one = 1.0; // Used for checking IEEE754 floating point format
+    UINT32_TYPE *ip; // Used for checking IEEE754 floating point format
+    
+    if( checkieee ) { // 1st call, so check for IEEE754, Endian, and word size
+        ip = (UINT32_TYPE *) &one;
+        if( *ip ) { // If Big Endian, then no adjustment
+            next = 0;
+        } else { // If Little Endian, then adjustment will be necessary
+            next = 1;
+            ip++;
+        }
+        if( *ip != 0x3FF00000u ) { // Check for exact IEEE 754 bit pattern of 1.0
+            return 1;  // Floating point bit pattern is not IEEE 754
+        }
+        if( sizeof(INT16_TYPE) != 2 || sizeof(INT32_TYPE) != 4 ) {
+            return 1;  // short is not 16-bits, or long is not 32-bits.
+        }
+        checkieee = 0; // Everything checks out OK
+    }
+    
+    if( srcFloat == NULL || dstHalfFloat == NULL ) { // Nothing to convert (e.g., imag part of pure real)
+        return 0;
+    }
+    
+    while( length-- ) {
+        x = *xp++;
+        if( (x & 0x7FFFFFFFu) == 0 ) {  // Signed zero
+            *hp++ = (UINT16_TYPE) (x >> 16);  // Return the signed zero
+        } else { // Not zero
+            xs = x & 0x80000000u;  // Pick off sign bit
+            xe = x & 0x7F800000u;  // Pick off exponent bits
+            xm = x & 0x007FFFFFu;  // Pick off mantissa bits
+            if( xe == 0 ) {  // Denormal will underflow, return a signed zero
+                *hp++ = (UINT16_TYPE) (xs >> 16);
+            } else if( xe == 0x7F800000u ) {  // Inf or NaN (all the exponent bits are set)
+                if( xm == 0 ) { // If mantissa is zero ...
+                    *hp++ = (UINT16_TYPE) ((xs >> 16) | 0x7C00u); // Signed Inf
+                } else {
+                    *hp++ = (UINT16_TYPE) 0xFE00u; // NaN, only 1st mantissa bit set
+                }
+            } else { // Normalized number
+                hs = (UINT16_TYPE) (xs >> 16); // Sign bit
+                hes = ((int)(xe >> 23)) - 127 + 15; // Exponent unbias the single, then bias the halfp
+                if( hes >= 0x1F ) {  // Overflow
+                    *hp++ = (UINT16_TYPE) ((xs >> 16) | 0x7C00u); // Signed Inf
+                } else if( hes <= 0 ) {  // Underflow
+                    if( (14 - hes) > 24 ) {  // Mantissa shifted all the way off & no rounding possibility
+                        hm = (UINT16_TYPE) 0u;  // Set mantissa to zero
+                    } else {
+                        xm |= 0x00800000u;  // Add the hidden leading bit
+                        hm = (UINT16_TYPE) (xm >> (14 - hes)); // Mantissa
+                        if( (xm >> (13 - hes)) & 0x00000001u ) // Check for rounding
+                            hm += (UINT16_TYPE) 1u; // Round, might overflow into exp bit, but this is OK
+                    }
+                    *hp++ = (hs | hm); // Combine sign bit and mantissa bits, biased exponent is zero
+                } else {
+                    he = (UINT16_TYPE) (hes << 10); // Exponent
+                    hm = (UINT16_TYPE) (xm >> 13); // Mantissa
+                    if( xm & 0x00001000u ) // Check for rounding
+                        *hp++ = (hs | he | hm) + (UINT16_TYPE) 1u; // Round, might overflow to inf, this is OK
+                    else
+                        *hp++ = (hs | he | hm);  // No rounding
+                }
+            }
+        }
+    }
+    return 0;
+}
+

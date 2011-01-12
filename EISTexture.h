@@ -10,8 +10,11 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-#define	checkPatternWidth  (8)
-#define	checkPatternHeight (8)
+//#define	checkPatternWidth  (8)
+//#define	checkPatternHeight (8)
+
+#define	checkPatternWidth  (256)
+#define	checkPatternHeight (256)
 
 typedef enum {
 	NGTextureFormat_Invalid = 0,
@@ -70,7 +73,7 @@ typedef enum {
 
 - (id)initAsRandomValuesWidth:(NSUInteger)width height:(NSUInteger)height;
 
-- (id)initWithCheckPattern;
+- (id)initWithCheckPatternAlphaChannel;
 
 + (BOOL) isSizePowerOfTwo:(uint32_t)size;
 
