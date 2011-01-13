@@ -12,8 +12,8 @@
 
 static int singles2halfp(void *dstHalfFloat, void *srcFloat, int length);
 
-//static GLubyte checkPatternAlpha[checkPatternHeight][checkPatternWidth];
-static GLubyte checkPatternAlphaChannelUnsignedByte[checkPatternHeight * checkPatternWidth];
+static GLubyte checkPatternUnsignedByte[checkPatternHeight * checkPatternWidth];
+static float checkPatternFloat[checkPatternHeight * checkPatternWidth];
 
 const int kMaxTextureSizeExp = 10;
 #define kMaxTextureSize (1 << kMaxTextureSizeExp)
@@ -26,7 +26,8 @@ const int kMaxTextureSizeExp = 10;
 
 + (NSString*)alphaDescriptionForAlphaInfo:(CGImageAlphaInfo)alphaInfo;
 
-+ (void) createCheckPatternAlphaChannel;
++ (void) createCheckPatternUnsignedByte;
++ (void) createCheckPatternFloat;
 
 + (void) randomValueLookUpTableBuffer:(float *) buffer width:(NSUInteger)width height:(NSUInteger)height;
 
@@ -480,7 +481,6 @@ const int kMaxTextureSizeExp = 10;
 		[EISGLHelpful checkGLError];
 		
 		NSData *d = [data objectForKey:@"pixels"];
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_width, m_height, 0, GL_LUMINANCE, GL_FLOAT,          (GLubyte *)[d bytes]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_width, m_height, 0, GL_LUMINANCE, GL_HALF_FLOAT_OES, (GLubyte *)[d bytes]);
 		[EISGLHelpful checkGLError];
 		
@@ -531,16 +531,16 @@ const int kMaxTextureSizeExp = 10;
 	
 }
 
-- (id)initWithCheckPatternAlphaChannel {
+- (id)initWithCheckPatternLuminanceTextureUnsignedByte {
 	
 	self = [super init];
 	
 	if(nil != self) {
-
-		[EISTexture createCheckPatternAlphaChannel];
+		
+		[EISTexture createCheckPatternUnsignedByte];
 		
 		
-		 m_width	= checkPatternWidth;
+		m_width	= checkPatternWidth;
 		m_height	= checkPatternHeight;
 		
 		glGenTextures(1, &m_name);
@@ -552,13 +552,51 @@ const int kMaxTextureSizeExp = 10;
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
+		
 		m_channelCount	= 1;
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA,		m_width, m_height, 0, GL_ALPHA,		GL_UNSIGNED_BYTE, (GLubyte *)checkPatternAlphaChannelUnsignedByte);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE,	m_width, m_height, 0, GL_LUMINANCE,	GL_UNSIGNED_BYTE, (GLubyte *)checkPatternAlphaChannelUnsignedByte);
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA,		m_width, m_height, 0, GL_ALPHA,		GL_UNSIGNED_BYTE, (GLubyte *)checkPatternUnsignedByte);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE,	m_width, m_height, 0, GL_LUMINANCE,	GL_UNSIGNED_BYTE, (GLubyte *)checkPatternUnsignedByte);
 		
 		[EISGLHelpful checkGLError];
+		
+	}
+	
+	return self;
+}
+
+- (id)initWithCheckPatternLuminanceTextureHalfFloat {
+	
+	self = [super init];
+	
+	if(nil != self) {
+		
+		[EISTexture createCheckPatternFloat];
+		
+		self.width = checkPatternWidth;
+		self.height = checkPatternHeight;
+
+		int numberOfSamples = self.width * self.height;
+		int length = numberOfSamples * sizeof(unsigned short);
+		unsigned short *halfFloats = (unsigned short *) malloc(length);
+		
+		(void)singles2halfp((void *)halfFloats, (void *)checkPatternFloat, numberOfSamples);
 				
+		glGenTextures(1, &m_name);
+		glBindTexture(GL_TEXTURE_2D, m_name);
+		
+		// Clamp at texture boundaries
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		
+		// NO interpolation of table values
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		
+		m_channelCount	= 1;
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, self.width, self.height, 0, GL_LUMINANCE, GL_HALF_FLOAT_OES, (GLubyte *)halfFloats);
+		[EISGLHelpful checkGLError];
+		
+		free(halfFloats);
 	}
 	
 	return self;
@@ -756,12 +794,10 @@ const int kMaxTextureSizeExp = 10;
 	return result;
 };
 
-+ (void) createCheckPatternAlphaChannel {
++ (void) createCheckPatternUnsignedByte {
 	
 	NSUInteger k = 0;
 	for (int i = 0; i < checkPatternHeight; i++) {
-		
-		//		DLog(@"row %d", i);
 		
 		for (int j = 0; j < checkPatternWidth; j++) {
 			
@@ -769,20 +805,30 @@ const int kMaxTextureSizeExp = 10;
 			//			int c = ( ( ( (i & 0x4) == 0) ^ ( (j & 0x4) ) == 0) ) * 255;
 			//			int c = ( ( ( (i & 0x2) == 0) ^ ( (j & 0x2) ) == 0) ) * 255;
 			
-			//			checkPatternRGBA[i][j][0] = (GLubyte) c;
-			//			checkPatternRGBA[i][j][1] = (GLubyte) c;
-			//			checkPatternRGBA[i][j][2] = (GLubyte) c;
-			//			checkPatternRGBA[i][j][3] = (GLubyte) 255;
+			checkPatternUnsignedByte[ k ] = (GLubyte) c;
 			
-			//			checkPatternAlpha[i][j] = (GLubyte) c;
-			//			DLog(@"(%d, %d) = %d", i, j, checkPatternAlpha[i][j]);
-			
-			checkPatternAlphaChannelUnsignedByte[ k ] = (GLubyte) c;
-			//			DLog(@"(%d, %d) = %d", i, j, checkPatternAlpha1D[ k ]);
 			++k;
-		}
+		}		
 		
-		//		DLog(@"\n");
+	}
+	
+}
+
++ (void) createCheckPatternFloat {
+	
+	NSUInteger k = 0;
+	for (int i = 0; i < checkPatternHeight; i++) {
+		
+		for (int j = 0; j < checkPatternWidth; j++) {
+			
+			int c = ( ( ( (i & 0x8) == 0) ^ ( (j & 0x8) ) == 0) ) * 255;
+			//			int c = ( ( ( (i & 0x4) == 0) ^ ( (j & 0x4) ) == 0) ) * 255;
+			//			int c = ( ( ( (i & 0x2) == 0) ^ ( (j & 0x2) ) == 0) ) * 255;
+			
+			checkPatternFloat[ k ] = (float) c;
+			
+			++k;
+		}		
 		
 	}
 	

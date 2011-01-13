@@ -73,7 +73,9 @@ typedef enum {
 
 - (id)initAsRandomValuesWidth:(NSUInteger)width height:(NSUInteger)height;
 
-- (id)initWithCheckPatternAlphaChannel;
+- (id)initWithCheckPatternLuminanceTextureUnsignedByte;
+
+- (id)initWithCheckPatternLuminanceTextureHalfFloat;
 
 + (BOOL) isSizePowerOfTwo:(uint32_t)size;
 
