@@ -34,10 +34,8 @@ typedef enum {
 	
 	GLuint		m_name;
 	GLuint		m_location;
-	
 	GLuint		m_width;
 	GLuint		m_height;
-	
 	NSUInteger	m_channelCount;
 	
 	NSString	*m_filename;
@@ -45,12 +43,13 @@ typedef enum {
 	NGTextureFormat m_format;
 }
 
-@property (nonatomic, assign) GLuint		name;
-@property (nonatomic, assign) GLuint		location;
-@property (nonatomic, assign) GLuint		width;
-@property (nonatomic, assign) GLuint		height;
-@property (nonatomic        ) NSUInteger	channelCount;
-@property (nonatomic,   copy) NSString		*filename;
+@property (nonatomic          ) GLuint name;
+@property (nonatomic          ) GLuint location;
+@property (nonatomic          ) GLuint width;
+@property (nonatomic          ) GLuint height;
+@property (nonatomic          ) NSUInteger channelCount;
+
+@property (nonatomic,     copy) NSString		*filename;
 @property (nonatomic, readonly) NGTextureFormat format;
 
 - (id)initWithOpearationResults:(NSDictionary *)results;
@@ -70,6 +69,8 @@ typedef enum {
 - (id)initWithTextureFileNameFullPath:(NSString *)fullPath mipmap:(BOOL)mipmap;
 
 - (id)initWithWaveletData:(NSDictionary *)data;
+
+- (id)initFBORenderTextureRGBA8Width:(NSUInteger)width height:(NSUInteger)height;
 
 - (id)initAsRandomValuesWidth:(NSUInteger)width height:(NSUInteger)height;
 

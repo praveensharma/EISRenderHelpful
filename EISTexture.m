@@ -45,7 +45,7 @@ const int kMaxTextureSizeExp = 10;
 
 - (void)dealloc {
 	
-//	DLog(@"%@", self);
+	DLog(@"%@", self);
 	
 	glDeleteTextures(1, &m_name);
 
@@ -489,15 +489,47 @@ const int kMaxTextureSizeExp = 10;
 	return self;
 }
 
+- (id)initFBORenderTextureRGBA8Width:(NSUInteger)width height:(NSUInteger)height {
+	
+	self = [super init];
+	
+	if(nil != self) {
+		
+		self.width  = width;
+		self.height = height;
+				
+		glGenTextures(1, &m_name);
+		glBindTexture(GL_TEXTURE_2D, m_name);
+		
+		DLog(@"                         bind texture name %d", self.name);
+
+		// bi-linear interpolation
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		
+		// clamp to edges
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		
+		self.channelCount = 4;
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.width, self.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		[EISGLHelpful checkGLError];
+		
+	}
+	
+	return self;
+	
+}
+
 - (id)initAsRandomValuesWidth:(NSUInteger)width height:(NSUInteger)height {
 	
 	self = [super init];
 	
 	if(nil != self) {
-
+		
 		self.width = width;
 		self.height = height;
-
+		
 		float *floats = malloc(self.width * self.height * sizeof(float));
 		[EISTexture randomValueLookUpTableBuffer:floats width:self.width height:self.height];
 		
