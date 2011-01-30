@@ -17,11 +17,12 @@
 	EISVector3D		m_up;
 	
 	EISMatrix4x4	m_projectionViewModelTransform;
+	EISMatrix4x4	m_projectionViewTransform;
 	EISMatrix4x4	          m_viewModelTransform;
 
 	EISMatrix4x4	m_projection;
 	
-	EISMatrix4x4	        m_modelTransform;
+	EISMatrix4x4	m_modelTransform;
 	EISMatrix4x4	m_surfaceNormalTransform;
 	
 	EISMatrix4x4	m_scaleTransform;
@@ -59,6 +60,9 @@
 
 - (float *) projectionViewModelTransform; 
 - (void) setProjectionViewModelTransform:(EISMatrix4x4)input; 
+
+- (float *) projectionViewTransform; 
+- (void) setProjectionViewTransform:(EISMatrix4x4)input; 
 
 - (float *) viewModelTransform; 
 - (void) setViewModelTransform:(EISMatrix4x4)input; 

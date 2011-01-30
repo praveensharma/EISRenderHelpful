@@ -44,6 +44,8 @@
 
 		EISMatrix4x4SetIdentity(m_projectionViewModelTransform);
 		
+		EISMatrix4x4SetIdentity(m_projectionViewTransform);
+		
 		EISMatrix4x4SetIdentity(m_scaleTransform);
 
 		EISMatrix4x4SetIdentity(m_translationTransform);
@@ -270,6 +272,18 @@
 - (void) setProjectionViewModelTransform:(EISMatrix4x4)input {
 	
 	EISMatrix4x4Set(m_projectionViewModelTransform, input);
+	
+}
+
+- (float *) projectionViewTransform {
+	
+	return &m_projectionViewTransform[0];
+	
+}
+
+- (void) setProjectionViewTransform:(EISMatrix4x4)input {
+	
+	EISMatrix4x4Set(m_projectionViewTransform, input);
 	
 }
 

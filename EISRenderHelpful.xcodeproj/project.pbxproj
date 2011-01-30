@@ -85,6 +85,8 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				31FCE67912A7F3C500721AE8 /* EISRendererHelper.h */,
+				31FCE67A12A7F3C500721AE8 /* EISRendererHelper.m */,
 				31F34A4312AABD3C00FADB09 /* EISGLHelpful.h */,
 				31F34A4412AABD3C00FADB09 /* EISGLHelpful.m */,
 				31F34A4512AABD3C00FADB09 /* EISTexture.h */,
@@ -96,8 +98,6 @@
 				31FCE67812A7F3C500721AE8 /* EISPlane.m */,
 				31FCE67C12A7F3C500721AE8 /* EISVectorMatrix.h */,
 				31FCE67B12A7F3C500721AE8 /* EISVectorMatrix.cpp */,
-				31FCE67912A7F3C500721AE8 /* EISRendererHelper.h */,
-				31FCE67A12A7F3C500721AE8 /* EISRendererHelper.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
