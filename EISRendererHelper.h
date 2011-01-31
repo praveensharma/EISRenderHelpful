@@ -35,13 +35,16 @@
 	EISMatrix4x4	m_viewTransform;
 
 	EISMatrix4x4	m_cameraTransform;
-	
+
+	CGSize			m_viewportSize;
 
 	NSMutableDictionary	*m_renderables;
 
 }
 
-@property(nonatomic,retain)NSMutableDictionary *renderables;
+@property (nonatomic        ) CGSize				viewportSize;
+
+@property (nonatomic, retain) NSMutableDictionary	*renderables;
 
 // get/set eye
 - (float *) eye; 
@@ -88,6 +91,7 @@
 - (void) setViewTransform:(EISMatrix4x4)input; 
 
 - (float *) cameraTransform; 
+
 
 
 - (void)placeCameraAtLocation:(EISVector3D)location target:(EISVector3D)target up:(EISVector3D)up;

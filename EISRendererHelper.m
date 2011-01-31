@@ -11,6 +11,7 @@
 @implementation EISRendererHelper
 
 @synthesize renderables = m_renderables;
+@synthesize viewportSize = m_viewportSize;
 
 - (void) dealloc {
 	
