@@ -95,6 +95,9 @@ extern "C" {
 	//
 	void EISMatrix4x4Multiply(EISMatrix4x4 B, EISMatrix4x4 A, EISMatrix4x4 concatenation);
 	
+	// B * A -> A'
+	void EISConcatenate(EISMatrix4x4 B, EISMatrix4x4 A);
+	
 	void EISMatrix4x4SetIdentity(EISMatrix4x4 matrix);
 	
 	void EISMatrix4x4Set(EISMatrix4x4 dst, EISMatrix4x4 src);

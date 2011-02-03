@@ -337,14 +337,14 @@ const int kMaxTextureSizeExp = 10;
 			
 			m_channelCount	= [EISTexture channelsFromNGTextureFormat:self.format];
 
-			DLog(@"%@", self);
-			
 			uint8_t *imageData = [EISTexture imageDataFromCGImageRef:uiImage.CGImage textureFormat:self.format];
 			[uiImage release];
 			
 			
 			glGenTextures(1, &m_name);
 			glBindTexture(GL_TEXTURE_2D, m_name);
+
+			DLog(@"%@", self);
 			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -501,15 +501,19 @@ const int kMaxTextureSizeExp = 10;
 		glGenTextures(1, &m_name);
 		glBindTexture(GL_TEXTURE_2D, m_name);
 		
-		DLog(@"                         bind texture name %d", self.name);
-
 		// bi-linear interpolation
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		[EISGLHelpful checkGLError];
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		[EISGLHelpful checkGLError];
 		
 		// clamp to edges
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		[EISGLHelpful checkGLError];
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		[EISGLHelpful checkGLError];
 		
 		self.channelCount = 4;
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.width, self.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);

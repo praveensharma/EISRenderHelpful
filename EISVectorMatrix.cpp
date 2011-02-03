@@ -134,6 +134,30 @@ void EISMatrix4x4Multiply(EISMatrix4x4 B, EISMatrix4x4 A, EISMatrix4x4 concatena
 	
 }
 
+void EISConcatenate(EISMatrix4x4 B, EISMatrix4x4 A) {
+	
+    A[ 0] = B[0] * A[ 0] + B[4] * A[ 1] + B[ 8] * A [2] + B[12] * A[ 3];
+    A[ 1] = B[1] * A[ 0] + B[5] * A[ 1] + B[ 9] * A[ 2] + B[13] * A[ 3];
+    A[ 2] = B[2] * A[ 0] + B[6] * A[ 1] + B[10] * A[ 2] + B[14] * A[ 3];
+    A[ 3] = B[3] * A[ 0] + B[7] * A[ 1] + B[11] * A[ 2] + B[15] * A[ 3];
+    
+    A[ 4] = B[0] * A[ 4] + B[4] * A[ 5] + B[ 8] * A[ 6] + B[12] * A[ 7];
+    A[ 5] = B[1] * A[ 4] + B[5] * A[ 5] + B[ 9] * A[ 6] + B[13] * A[ 7];
+    A[ 6] = B[2] * A[ 4] + B[6] * A[ 5] + B[10] * A[ 6] + B[14] * A[ 7];
+    A[ 7] = B[3] * A[ 4] + B[7] * A[ 5] + B[11] * A[ 6] + B[15] * A[ 7];
+    
+    A[ 8] = B[0] * A[ 8] + B[4] * A[ 9] + B[ 8] * A[10] + B[12] * A[11];
+    A[ 9] = B[1] * A[ 8] + B[5] * A [9] + B[ 9] * A[10] + B[13] * A[11];
+    A[10] = B[2] * A[ 8] + B[6] * A[ 9] + B[10] * A[10] + B[14] * A[11];
+    A[11] = B[3] * A[ 8] + B[7] * A[ 9] + B[11] * A[10] + B[15] * A[11];
+    
+    A[12] = B[0] * A[12] + B[4] * A[13] + B[ 8] * A[14] + B[12] * A[15];
+    A[13] = B[1] * A[12] + B[5] * A[13] + B[ 9] * A[14] + B[13] * A[15];
+    A[14] = B[2] * A[12] + B[6] * A[13] + B[10] * A[14] + B[14] * A[15];
+    A[15] = B[3] * A[12] + B[7] * A[13] + B[11] * A[14] + B[15] * A[15];
+		
+}
+
 void EISMatrix4x4SetIdentity(EISMatrix4x4 matrix) {
 	
 	memcpy(matrix, _eis_vector_matrix_identity_matrix_4x4_, sizeof(EISMatrix4x4));
@@ -145,11 +169,6 @@ void EISMatrix4x4Set(EISMatrix4x4 dst, EISMatrix4x4 src) {
 
 void EISMatrix4x4SetTranslation(EISMatrix4x4 matrix, float xTranslate, float yTranslate, float zTranslate) {
 	
-	//    matrix[0] = matrix[5] = matrix[10] = matrix[15] = 1.0;
-	//    matrix[1] = matrix[2] = matrix[ 3] = matrix[ 4] = 0.0;
-	//    matrix[6] = matrix[7] = matrix[ 8] = matrix[ 9] = 0.0;    
-	//    matrix[11] = 0.0;
-	
 	EISMatrix4x4SetIdentity(matrix);
     matrix[12] = xTranslate; 
 	matrix[13] = yTranslate; 
@@ -157,10 +176,6 @@ void EISMatrix4x4SetTranslation(EISMatrix4x4 matrix, float xTranslate, float yTr
 }
 
 void EISMatrix4x4SetScaling(EISMatrix4x4 matrix, float xScale, float yScale, float zScale) {
-	
-	//    matrix[1] = matrix[2] = matrix[3] = matrix[4] = 0.0;
-	//    matrix[6] = matrix[7] = matrix[8] = matrix[9] = 0.0;
-	//    matrix[11] = matrix[12] = matrix[13] = matrix[14] = 0.0;
 	
 	EISMatrix4x4SetIdentity(matrix);
     matrix[ 0] = xScale;
