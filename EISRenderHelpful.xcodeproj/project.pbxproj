@@ -206,6 +206,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = EISRenderHelpful;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -220,6 +221,7 @@
 				GCC_PREFIX_HEADER = EISRenderHelpful_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = EISRenderHelpful;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
