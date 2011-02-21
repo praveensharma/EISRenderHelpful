@@ -38,12 +38,14 @@
 
 	CGSize			m_viewportSize;
 
+	NSMutableDictionary	*m_texturePackages;
+	
 	NSMutableDictionary	*m_renderables;
 
 }
 
 @property (nonatomic        ) CGSize				viewportSize;
-
+@property (nonatomic, retain) NSMutableDictionary	*texturePackages;
 @property (nonatomic, retain) NSMutableDictionary	*renderables;
 
 // get/set eye

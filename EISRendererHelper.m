@@ -10,24 +10,26 @@
 
 @implementation EISRendererHelper
 
+@synthesize texturePackages = m_texturePackages;
 @synthesize renderables = m_renderables;
 @synthesize viewportSize = m_viewportSize;
 
 - (void) dealloc {
 	
-	[m_renderables release], m_renderables = nil;
+    [m_texturePackages	release], m_texturePackages	= nil;
+	[m_renderables		release], m_renderables		= nil;
+	
     [super dealloc];
 }
 
 - (id) init {
 	
 	if (self = [super init]) {
-		
-		self.renderables = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
-							 [NSNull null], @"texture",
-							 [NSNull null], @"model",
-							nil] autorelease];
 
+		self.renderables = [NSMutableDictionary dictionary];
+		
+		self.texturePackages = [NSMutableDictionary dictionary];
+		
 		EISVector3DSet(   m_eye, 0, 0,  0);
 		EISVector3DSet(m_target, 0, 0, -1);
 		EISVector3DSet(    m_up, 0, 1,  0);
