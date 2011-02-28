@@ -125,7 +125,7 @@ const int kMaxTextureSizeExp = 10;
 
 + (NGTextureFormat) textureFormatFromCGImage:(CGImageRef)aCGImageRef {
 	
-	DLog(@"Regarding alpha %@", [self alphaDescriptionForAlphaInfo:(CGImageGetAlphaInfo(aCGImageRef))]);
+//	DLog(@"Regarding alpha %@", [self alphaDescriptionForAlphaInfo:(CGImageGetAlphaInfo(aCGImageRef))]);
 
 	CGImageAlphaInfo alpha = CGImageGetAlphaInfo(aCGImageRef);
 	
@@ -344,7 +344,7 @@ const int kMaxTextureSizeExp = 10;
 			glGenTextures(1, &m_name);
 			glBindTexture(GL_TEXTURE_2D, m_name);
 
-			DLog(@"%@", self);
+//			DLog(@"%@", self);
 			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
